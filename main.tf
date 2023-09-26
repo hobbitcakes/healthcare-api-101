@@ -28,6 +28,7 @@ resource "google_project_service" "project" {
 }
 
 resource "google_healthcare_dataset" "dataset" {
+  depends_on = [google_project_service.project] 
   provider = google
   name      = "101-dataset-${random_pet.pet.id}"
   location  = "${var.region}"
@@ -152,6 +153,7 @@ resource "google_storage_bucket" "input-bucket" {
 }
 
 resource "google_storage_bucket_iam_binding" "binding" {
+  depends_on = [google_project_service.project] 
   bucket = google_storage_bucket.input-bucket.name
   role = "roles/storage.objectAdmin"
   members = [

@@ -1,2 +1,3 @@
-#!/bin/bash
+#!/bin/bash 
 curl -s -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application/fhir+json" $*
+
