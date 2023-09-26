@@ -17,6 +17,16 @@ resource "random_pet" "pet" {
   }
 }
 
+resource "google_project_service" "project" {
+  project = "${var.project_id}"
+  service = "healthcare.googleapis.com"
+
+  timeouts {
+    create = "10m"
+    update = "10m"
+  }
+}
+
 resource "google_healthcare_dataset" "dataset" {
   provider = google
   name      = "101-dataset-${random_pet.pet.id}"
