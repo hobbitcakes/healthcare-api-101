@@ -35,6 +35,9 @@ terraform init
 terraform plan # You're responsible for checking this!!
 terraform apply
 ```
+Note: You may need to run terraform apply multiple times as it can take a few
+minutes for the Healthcare API to be enabled and usable by Terraform.
+
 ### Save the Terraform variables with the following bash script
 ```bash
 bin/store-env-vars.sh
@@ -54,9 +57,10 @@ source environment.out
 ## The fhirStore
 
 ### Load FHIR Data
-To begin, let's do a few things. Load our first few (thousand) FHIR "Reference" Resources. And then Load a Patient and their associated Longitudinal Record. Finally, we'll download a much larger dataset we will use later.
+To begin, let's do a few things. Load our first few (thousand) FHIR "Reference" Resources. And then Load a Patient and their associated Longitudinal Record. Finally, we'll download a much larger dataset we will use later provided by the Coherent Dataset from MITRE.
 
 ```bash
+bin/download-cooherent-fhir-in-bulk.sh
 gsutil -m cp * gs://${gcs_bucket}/in/
 ```
 

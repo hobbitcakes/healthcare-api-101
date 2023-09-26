@@ -7,6 +7,6 @@ if [ ! -d bin ]; then
   exit 1
 fi
 
-echo 'PATH=${PATH}:$(pwd)/bin' > $OUT_FILE
+echo 'PATH=$(pwd)/bin:${PATH}' > $OUT_FILE
 terraform output | sed 's/ //g' | awk '{print "export " $0}' >> $OUT_FILE
 
