@@ -59,6 +59,74 @@ source environment.out
 ### Load FHIR Data
 To begin, let's do a few things. Load our first few (thousand) FHIR "Reference" Resources. And then Load a Patient and their associated Longitudinal Record. Finally, we'll download a much larger dataset we will use later provided by the Coherent Dataset from MITRE.
 
+#### Setup
+```bash
+# 
+cd healthcare-api-101/
+source environment.out
+cd data/fhir/bundle
+```
+#### Load Reference data
+```bash
+bundle ${fhir_url}/fhir -d @reference-orgs.json | jq '.'
+bundle ${fhir_url}/fhir -d @reference-practitioners.json | jq '.'
+```
+#### Load our Patient "Kerry" and his Longitudinal Record
+```bash
+bundle ${fhir_url}/fhir -d @Kerry175_Gislason620_fe667044-eea1-3d0f-1b02-156eb1fd8b5c.json | jq '.'
+```
+
+Now that Kerry is loaded into the FHIR Store, you should have a single Patient Record. Let's do our first List operation!
+```bash
+get "${fhir_url}/fhir/Patient" | jq '.'
+```
+
+The JSON document returned will be a searchset containing Terry's "Patient" FHIR Resource. The below example is edited for brevity.
+
+```json
+{
+  "entry": [ // <-- List of returned FHIR Resources
+    { // <-- Start of the FHIR Resource
+      "fullUrl": "https://healthcare.googleapis.com/v1/projects//locations//datasets/101-dataset/fhirStores/fhirstore/fhir/Patient/653be6d8-1d87-42ed-85e9-96ad518fad49",
+      "resource": {
+        "address": [
+            {
+            "city": "Somerset",
+            "country": "US",
+...
+            }
+        ]
+      }
+    } // <-- End of the FHIR Resource
+  ]
+  "link": [
+...
+  ],
+  "resourceType": "Bundle",
+  "total": 1, // <-- Number of matched results, not the number of returned resources
+  "type": "searchset" // <-- Bundle type
+}
+```
+
+The Patient search we just ran will be much too broad once we get more than one patient in our FHIR Store. Let's find the system id of the Patient. 
+```bash
+get "${fhir_url}/fhir/Patient" | jq -r '.entry[].resource.id'
+# Example Output
+653be6d8-1d87-42ed-85e9-96ad518fad49
+```
+Let's store this value and then use it to directly get Kerry's Patient FHIR Resource.
+
+```bash
+KERRY_ID=$(get "${fhir_url}/fhir/Patient" | jq -r '.entry[].resource.id')
+echo $KERRY_ID
+# Example output:
+653be6d8-1d87-42ed-85e9-96ad518fad49
+
+get "${fhir_url}/fhir/Patient/${KERRY_ID}" | jq '.'
+```
+
+You should have gotten the same large JSON object that we saw earlier with a notable difference. The JSON object returned was the resource itself. There is not an `entry[]` array or a `link[]` array or any `resourceType`, `total`, `type` objects. The return type of the direct GET fhir/<resourceType>/<uuid> returns a FHIR Object.
+
 ```bash
 bin/download-cooherent-fhir-in-bulk.sh
 gsutil -m cp * gs://${gcs_bucket}/in/
