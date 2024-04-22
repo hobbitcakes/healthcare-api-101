@@ -127,9 +127,17 @@ get "${fhir_url}/fhir/Patient/${KERRY_ID}" | jq '.'
 
 You should have gotten the same large JSON object that we saw earlier with a notable difference. The JSON object returned was the resource itself. There is not an `entry[]` array or a `link[]` array or any `resourceType`, `total`, `type` objects. The return type of the direct GET fhir/<resourceType>/<uuid> returns a FHIR Object.
 
+
+#### Optional: Download bulk data
+
+Download a whole lot of data. This is optional, but will give you an idea of the
+steps needed to load many FHIR Bundles into the Healthcare API using a batch
+ingestion process by calling the fhirStore.Import method.
+
+Download the data locally, then upload it to our GCS bucket into a /in/ path.
 ```bash
 bin/download-cooherent-fhir-in-bulk.sh
-gsutil -m cp * gs://${gcs_bucket}/in/
+cd data/fhir/bulk && gsutil -m cp * gs://${gcs_bucket}/in/
 ```
 
 
