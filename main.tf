@@ -72,16 +72,16 @@ resource "google_healthcare_fhir_store" "fhirstore" {
 
 resource "google_pubsub_topic" "hl7v2" {
   provider = google
-  name     = "hl7v2-topic"
+  name     = "${random_pet.pet.id}-hl7v2-topic"
 }
 
 resource "google_pubsub_topic" "fhir" {
   provider = google
-  name     = "fhir-topic"
+  name     = "${random_pet.pet.id}-fhir-topic"
 }
 
 resource "google_pubsub_subscription" "fhir-notifications" {
-  name  = "fhir-notifications"
+  name  = "${random_pet.pet.id}-fhir-notifications"
   topic = google_pubsub_topic.fhir.name
   
   # 1 day
@@ -102,11 +102,11 @@ resource "google_pubsub_subscription" "fhir-notifications" {
 
 resource "google_pubsub_topic" "full-fhir" {
   provider = google
-  name     = "full-fhir-topic"
+  name     = "${random_pet.pet.id}-full-fhir-topic"
 }
 
 resource "google_pubsub_subscription" "full-fhir-notifications" {
-  name  = "full-fhir-notifications"
+  name  = "${random_pet.pet.id}-full-fhir-notifications"
   topic = google_pubsub_topic.full-fhir.name
 
   # 1 day
@@ -126,7 +126,7 @@ resource "google_pubsub_subscription" "full-fhir-notifications" {
 }
 
 resource "google_pubsub_subscription" "full-patient-notifications" {
-  name  = "full-patient-notifications"
+  name  = "${random_pet.pet.id}-full-patient-notifications"
   topic = google_pubsub_topic.full-fhir.name
 
   # 1 day
