@@ -239,3 +239,4 @@ bin/wsdump
 # custom
 environment.out
 data/fhir/bulk/*.json
+data/fhir/bulk/coherent-11-07-2022.zip
