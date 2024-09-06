@@ -10,7 +10,6 @@ resource "google_pubsub_subscription" "full-patient-to-gcs" {
     bucket = google_storage_bucket.output-bucket.name
     filename_prefix = "${random_pet.pet.id}"
     filename_suffix = "-patient-"
-    filename_datetime_format = "YYYY-MM-DD/hh_mm_ssZ"
 
     avro_config {
       write_metadata = true
