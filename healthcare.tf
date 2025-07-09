@@ -1,15 +1,5 @@
-resource "google_project_service" "project" {
-  project = "${var.project_id}"
-  service = "healthcare.googleapis.com"
-
-  timeouts {
-    create = "10m"
-    update = "10m"
-  }
-}
-
 resource "google_healthcare_dataset" "dataset" {
-  depends_on = [google_project_service.project]
+  depends_on = [google_project_service.healthcare]
   provider = google
   name      = "101-dataset-${random_pet.pet.id}"
   location  = "${var.region}"

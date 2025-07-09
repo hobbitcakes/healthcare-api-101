@@ -11,7 +11,7 @@ resource "google_storage_bucket" "output-bucket" {
 }
 
 resource "google_storage_bucket_iam_binding" "binding" {
-  depends_on = [google_project_service.project]
+  depends_on = [google_project_service.healthcare]
   bucket = google_storage_bucket.input-bucket.name
   role = "roles/storage.objectAdmin"
   members = [
